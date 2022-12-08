@@ -5,25 +5,28 @@ class TreeNode:
         self.left = left
         self.right = right
 class Solution:
-    def getLeaf(self, root):
-        if root is None:
-            return []
-        if root.left is None and root.right is None:
-            return [root.val]
-        return self.getLeaf(root.left) + self.getLeaf(root.right)
+    # Generator to yield all leafs in a tree
+    def leafs(self, root):
+        if root:
+            # Check if the node is a leaf
+            if root.left is None and root.right is None:
+                yield root.val
+            # If not a leaf, check the left and right nodes
+            for node in self.leafs(root.left):
+                yield node
+            for node in self.leafs(root.right):
+                yield node
 
-    def leafSimilar(self, root1: Optional[TreeNode], root2: Optional[TreeNode]) -> bool:
-        # get leafs from root1
-        leafs1 = self.getLeaf(root1)
-        # get leafs from root2
-        leafs2 = self.getLeaf(root2)
-               
-        # check if the leafs match content
-        if leafs1 == leafs2:
-        # return true if they match
-            return True
-        else:
-            return False
+    def leafSimilar(self, root1: TreeNode, root2: TreeNode) -> bool:
+        # Create Generator expressions for both trees
+        root1Generator = (node for node in self.leafs(root1))
+        root2Generator = (node for node in self.leafs(root2))
+        # Compare the two generators
+        while True:
+            if next(root1Generator) != next(root2Generator):
+                return False
+            else:
+                return True
 
 
 print(leafSimilar([3,5,1,6,2,9,8,null,null,7,4],[3,5,1,6,7,4,2,null,null,null,null,null,null,9,8]))
