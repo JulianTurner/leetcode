@@ -28,5 +28,3 @@ class Solution:
             else:
                 return True
 
-
-print(leafSimilar([3,5,1,6,2,9,8,null,null,7,4],[3,5,1,6,7,4,2,null,null,null,null,null,null,9,8]))
