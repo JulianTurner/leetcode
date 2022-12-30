@@ -1,22 +1,23 @@
+from functools import cache
+
 class Solution:
     def allPathsSourceTarget(self, graph: list[list[int]]) -> list[list[int]]:
         last_nr = len(graph) - 1
-        cache = {last_nr:[[last_nr]]}
+
 
         # for current node get the next nodes
+        @cache
         def get_next_node(current: int) -> list[list[int]]:
-            if current in cache:
-                return cache[current]
+            if current == last_nr:
+                return [[last_nr]]
 
             paths = []
-
             for node in graph[current]: # iterate through children
                 for child_path in get_next_node(node): # iterate through solutions of child
                     current_child_path = list(child_path)
                     current_child_path.insert(0,current)
                     paths.append(current_child_path)
-            cache[current] = paths
-            
+
             return paths
         return get_next_node(0)
 
