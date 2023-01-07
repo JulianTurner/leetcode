@@ -2,7 +2,7 @@
 // README at: https://github.com/devcontainers/templates/tree/main/src/python
 {
     "name": "Python 3",
-    "image": "mcr.microsoft.com/devcontainers/python:3.11-bullseye",
+    "image": "mcr.microsoft.com/devcontainers/python:3.10-bullseye",
     "extensions": [
         "ms-python.python",
         "oderwat.indent-rainbow",
