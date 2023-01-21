@@ -2,7 +2,7 @@ from math import inf
 
 
 class Solution:
-    def maxSubArray(self, nums: list[int]) -> int:
+    def maxSubArray(self, nums: List[int]) -> int:
         max_so_far = -inf
         max_ending_here = 0
 
