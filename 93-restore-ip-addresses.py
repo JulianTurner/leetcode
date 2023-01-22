@@ -1,5 +1,5 @@
 class Solution:
-    def restoreIpAddresses(self, s: str) -> list[str]:
+    def restoreIpAddresses(self, s: str) -> List[str]:
         valid_ips = []
 
         # IP BLOCK [1,2,3,4]
