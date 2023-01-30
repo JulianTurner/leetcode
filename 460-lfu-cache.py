@@ -43,7 +43,7 @@ class LFUCache:
         if current_bucket[0] is current_container:
             if current_container.next:
                 self.count_dict[current_container.use_count] = (current_container.next, current_bucket[1])
-
+lee
         if current_bucket[1] is current_container:
             if current_container.prev:
                 self.count_dict[current_container.use_count] = (current_bucket[0], current_container.prev)
