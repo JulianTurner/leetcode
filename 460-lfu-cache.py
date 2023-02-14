@@ -1,92 +1,41 @@
 from collections import defaultdict
 
 class LFUCache:
-    class ValueContainer:
-        def __init__(self, value) -> None:
-            self.prev = None # ValueContainer
-            self.next = None # ValueContainer
-            self.value = value
-            self.use_count = 1
-
     def __init__(self, capacity: int):
-        self.main_dict = {} # key -> ValueContainer
-        self.count_dict = {} # count -> (headContainer, tailContainer)
-        self.capacity = capacity
-        self.smallest_container = -1
-
-    def update_prev_next_references(self, container: ValueContainer):
-        # update references prev and next
-        if container.prev and container.next:
-            container.prev.next = container.next
-            container.next.prev = container.prev
-        elif container.prev:
-            container.prev.next = None
-        elif container.next:
-            container.next.prev = None
-
-        container.prev = None
-        container.next = None
-
-    def insert_in_higher_container(self, container: ValueContainer):
-        container.use_count += 1
-        if container.use_countcount in self.count_dict:
-            current_head, current_tail = self.count_dict[container.use_count]
-            current_head.prev = container
-            container.next = current_head
-            self.count_dict[container.use_count] = (container, current_tail)
-
-
-    def use_existing_key(self, key):
-        # update count_dict
-        current_container = self.main_dict[key]
-        current_bucket = self.count_dict[current_container.use_count]
-        if current_bucket[0] is current_container:
-            if current_container.next:
-                self.count_dict[current_container.use_count] = (current_container.next, current_bucket[1])
-lee
-        if current_bucket[1] is current_container:
-            if current_container.prev:
-                self.count_dict[current_container.use_count] = (current_bucket[0], current_container.prev)
-
-        if current_bucket[0] is current_container and current_bucket[1] is current_container:
-            del self.count_dict[current_container.use_count]
-            if self.smallest_container == current_container.use_count:
-                self.smallest_container += 
-
-        # update the references 
-        self.update_prev_next_references(current_container)
-            
-        # insert in higher count_dict container
-        self.insert_in_higher_container(current_container)
-
-
+        self.vals = {} # key -> value
+        self.counts = {} # key -> times used
+        self.lists = defaultdict(lambda: set()) # times used -> set(key)
+        self.lists[1] = set()
+    
+        self.cap = capacity
+        self.min = -1
     
     def get(self, key: int) -> int:
-        if key in self.main_dict:
-            self.use_existing_key(key)
-            return self.main_dict[key].value
-        else:
+        if key not in self.vals:
             return -1
         
+        count = self.counts[key]
+        self.counts[key] += 1
+        self.lists[count].remove(key)
+
+        if(count == self.min and (not self.lists[count])):
+            self.min += 1
+
+        self.lists(count+1).add(key)
+        return self.vals[key]
+
 
     def put(self, key: int, value: int) -> None:
-        if (key not in self.main_dict) and (len(self.main_dict) == self.capacity):
+        if(self.cap <= 0):
+            return
 
-            pass
+        if key in self.vals:
+            self.vals[key] = value
+            self.get(key)
+            return
 
-
-        if key not in self.main_dict:
-            new_container = self.ValueContainer(value)
-            self.main_dict[key] = new_container
-
-            if 1 in self.count_dict:
-                self.count_dict[1].prev = new_container
-                self.count_dict[1] = (new_container, self.count_dict[1][1])
-            else:
-                self.count_dict[1] = (new_container, new_container)
-        else:
-            # insert in higher use_count
-            self.use_existing_key(key)
+        if len(self.vals) >= self.cap:
+            self.lists(self.min)
 
 
 # Your LFUCache object will be instantiated and called as such:
